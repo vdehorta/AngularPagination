@@ -56,14 +56,6 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
     };
 
 
-    $scope.sortOnceAgain = function (items, order, reverse) {
-        var reverseStr = "";
-        if (reverse === "yes") {
-            reverseStr = "-";
-        }
-        var result = items.sort(UtilSrvc.dynamicSort(reverseStr + order));
-        return result;
-    };
 
     // calculate page in place
     $scope.groupToPages = function () {
