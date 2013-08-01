@@ -10,29 +10,14 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
 
     $scope.searchObject={};
 
-    $scope.sortBy = $routeParams.sortBy;
-    $scope.reverse = $routeParams.reverse;
     $scope.currentPage = $routeParams.currentPage;
 
-    if (!$scope.sortBy) {
-        $scope.sortBy = 'name';
-    }
-    if (!$scope.reverse) {
-        $scope.reverse = "no";
-    }
+
     if (!$scope.currentPage) {
         $scope.currentPage = 0;
     }
 
-    $scope.searchObject.sortBy = $scope.sortBy;
-    $scope.searchObject.reverse = $scope.reverse;
     $scope.searchObject.currentPage = $scope.currentPage;
-
-    console.log("sortingBy is ");
-    console.log($scope.sortBy);
-
-    console.log("reverse is ");
-    console.log($scope.reverse);
 
     console.log("currentPage is ");
     console.log($scope.currentPage);
