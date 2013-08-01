@@ -10,10 +10,9 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
 
     $scope.searchObject={};
 
-    $scope.sortBy = $routeParams["sortBy"];
-    $scope.reverse = $routeParams["reverse"];
-    $scope.currentPage = $routeParams["currentPage"];
-    $scope.searchQueries = $routeParams["searchQueries"];
+    $scope.sortBy = $routeParams.sortBy;
+    $scope.reverse = $routeParams.reverse;
+    $scope.currentPage = $routeParams.currentPage;
 
     if (!$scope.sortBy) {
         $scope.sortBy = 'name';
@@ -24,15 +23,10 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
     if (!$scope.currentPage) {
         $scope.currentPage = 0;
     }
-    if (!$scope.searchQueries) {
-        $scope.searchQueries = [];
-        delete $scope.searchObject.searchQueries;
-    }
 
     $scope.searchObject.sortBy = $scope.sortBy;
     $scope.searchObject.reverse = $scope.reverse;
     $scope.searchObject.currentPage = $scope.currentPage;
-    $scope.searchObject.searchQueries = $scope.searchQueries;
 
     console.log("sortingBy is ");
     console.log($scope.sortBy);
@@ -43,8 +37,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
     console.log("currentPage is ");
     console.log($scope.currentPage);
 
-    console.log("searchQueries is ");
-    console.log($scope.searchQueries);
+
 
     $scope.itemsPerPage = 5;
     $scope.filteredItems = [];
@@ -69,30 +62,8 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
         {"id":"16","name":"strasbourg2","description":"club de tennis","field3":"moyen","field4":"ligue 1","field5":"r9"}
     ];
 
-    var searchMatch = function (haystack, needle) {
-        if (!needle) {
-            return true;
-        }
-        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
-    };
 
-    $scope.$on('FilterChanged', function(event, values) {
-
-        //adapt search queries
-        if (values.length === 1 && values[0] === "") {
-               delete   $scope.searchObject.searchQueries;
-        } else {
-            $scope.searchObject.searchQueries = values;
-        }
-
-        UtilSrvc.safeApply($scope, function() {
-            $scope.searchObject.currentPage = 0;
-            $location.search($scope.searchObject);
-        });
-
-    });
-
-    // init the filtered items
+// init the filtered items
     $scope.search = function (queryTerms) {
         $scope.filteredItems = angular.copy($scope.items);
         var newQueryTerms = [];
@@ -111,7 +82,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
                 }
                 return false;
             });
-       }
+        }
         // take care of the sorting order
         if ($scope.sortBy !== '') {
             $scope.filteredItems = $scope.sortOnceAgain($scope.filteredItems, $scope.sortBy, $scope.reverse);
@@ -120,6 +91,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
         $scope.groupToPages();
     };
 
+
     $scope.sortOnceAgain = function (items, order, reverse) {
         var reverseStr = "";
         if (reverse === "yes") {
@@ -127,7 +99,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
         }
         var result = items.sort(UtilSrvc.dynamicSort(reverseStr + order));
         return result;
-    }
+    };
 
     // calculate page in place
     $scope.groupToPages = function () {
@@ -160,7 +132,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
             UtilSrvc.safeApply($scope, function() {
                 $scope.searchObject.currentPage = $scope.currentPage;
                 $location.search($scope.searchObject);
-            })
+            });
 
         }
     };
@@ -171,7 +143,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
             UtilSrvc.safeApply($scope, function() {
                 $scope.searchObject.currentPage = $scope.currentPage;
                 $location.search($scope.searchObject);
-            })
+            });
         }
     };
 
@@ -184,11 +156,11 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
     // change sorting order
     $scope.sort_by = function(newSortBy) {
         if ($scope.sortBy === newSortBy) {
-            if($scope.reverse === "yes") {
-                $scope.reverse = "no";
-            } else {
+            if ($scope.reverse !== "yes") {
                 $scope.reverse = "yes";
-            };
+            } else {
+                $scope.reverse = "no";
+            }
         }
         $scope.sortBy = newSortBy;
 
