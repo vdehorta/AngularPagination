@@ -25,7 +25,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
 
 
     $scope.itemsPerPage = 5;
-    $scope.filteredItems = [];
+    $scope.items = [];
     $scope.groupedItems = [];
     $scope.pagedItems = [];
     $scope.items = [
@@ -49,8 +49,7 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
 
 
 // init the filtered items
-    $scope.search = function (queryTerms) {
-        $scope.filteredItems = angular.copy($scope.items);
+    $scope.search = function () {
         // now group by pages
         $scope.groupToPages();
     };
@@ -61,11 +60,11 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
     $scope.groupToPages = function () {
         $scope.pagedItems = [];
 
-        for (var i = 0; i < $scope.filteredItems.length; i++) {
+        for (var i = 0; i < $scope.items.length; i++) {
             if (i % $scope.itemsPerPage === 0) {
-                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [ $scope.filteredItems[i] ];
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [ $scope.items[i] ];
             } else {
-                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.items[i]);
             }
         }
     };
@@ -89,7 +88,6 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
                 $scope.searchObject.currentPage = $scope.currentPage;
                 $location.search($scope.searchObject);
             });
-
         }
     };
 
@@ -103,10 +101,6 @@ angularPrmApp.controller("MyCtrl" ,function ($location, $scope, $filter, UtilSrv
         }
     };
 
-    $scope.setPage = function () {
-        $scope.currentPage = this.n;
-    };
-
-    $scope.search($scope.searchQueries);
+    $scope.search();
 
 });
